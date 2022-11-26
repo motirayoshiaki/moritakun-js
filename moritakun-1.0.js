@@ -53,7 +53,7 @@ function moritakun () {
 					var $this = jQuery(this);
 					$window.on('scroll', function () {
 						var w = this.innerHeight, s = this.scrollY;
-						( w < $page.height() && s > 0 ) ? $this.fadeIn(opt.fadeTime) : $this.stop().fadeOut(opt.fadeTime);
+						( w < $page.height() && s > 0 ) ? $this.fadeIn(opts.fadeTime) : $this.stop().fadeOut(opts.fadeTime);
 					}).trigger('scroll');
 				});
 			};
