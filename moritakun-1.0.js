@@ -87,7 +87,7 @@ function moritakun () {
 		// jquery.lazyload をセット
 		// --------------------
 
-		this.applyJQqueryLazyload = function( selector, opt ) {
+		this.setJQqueryLazyload = function( selector, opt ) {
 			// jQuery版は [data-original] のみ動作
 			if ( ! selector ) selector = '*:visible img[data-original].lazyload';
 			var $lazyload = ( 'object' == typeof selector ) ? selector : jQuery(selector);
@@ -144,7 +144,7 @@ function moritakun () {
 			return swiper;
 		};
 
-		this.applyJQquerySwiper = function( selector, opt ) {
+		this.setJQquerySwiper = function( selector, opt ) {
 			if ( ! selector ) selector = '.swiper';
 			var $swiper = ( 'object' == typeof selector ) ? selector : jQuery(selector);
 			if ( ! $swiper.length ) return;
