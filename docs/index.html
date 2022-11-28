@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, maximum-scale=1, user-scalable=yes">
+<title>moritakun-js</title>
+<link rel="stylesheet" href="css/moritakun-1.0-full.css">
+<script src="./js/moritakun-1.0.min.js"></script>
+<script>
+var moritakun = new moritakun();
+var d = document;
+moritakun.init();
+</script>
+</head>
+<body>
+<div id="wrapper">
+
+	<header class="container-fluid" id="header">
+<h1>moritakun-1.0.js</h1>
+<p>
+moritakun-1.0.js は moritakun-1.0.css と一緒に使うために書かれましたが、どちらか片方だけでも利用できます。<br>
+基本的には jQuery とプラグインを非同期で読み込むために利用します。
+</p>
+<p>
+また、スクリプト内では window.$ ではなく window.jQuery を使用しているため注意が必要です。これは他の window.$ を使用するライブラリとのコンフリクトを回避するためです。
+</p>
+	</header>
+
+
+
+
+<hr>
+
+
+
+
+	<main class="container-fluid" id="main">
+
+		<section class="mb-5">
+			<h2 class="mt-5 mb-5">基本的な使い方</h2>
+<pre class="codesample mt-3"><code>&lt;script src="moritakun-1.0.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+var moritakun = new moritakun();
+moritakun.init();
+moritakun.jQuery( null, function () {
+	window.$window  = jQuery(window);
+} );
+&lt;/script&gt;</code></pre>
+		</section>
+
+
+<hr>
+
+<p><b>
+<a href="#functions">関数、式</a>｜
+<a href="#properties">プロパティ</a>｜
+<a href="#jqueryplugin">jQuery プラグイン</a>
+</b></p>
+
+<hr>
+
+
+
+		<section class="mb-5" id="functions">
+			<h2 class="mt-5 mb-5">関数、式</h2>
+
+			<h3 class="mt-5 mb-5">moritakun.init( args )</h3>
+<p>
+最初に実行して初期設定します。第一引数はオプションのオブジェクトを受け取ります。
+</p>
+
+			<h5 class="mt-5 mb-5">オプション</h5>
+			<dl>
+				<dt>wrapper（Boolean）</dt>
+				<dd>
+true で BODY直下に&lt;div id="wrapper" /&gt;を配置してコンテンツをラップする。主にBODY直下を操作できないプラットフォームで moritakun-css を使う場合などに使用。<br>
+<code>初期値 : false</code>
+<pre class="codesample mt-3"><code>moritakun.init( {
+  'wrapper': true
+} );</code></pre>
+				</dd>
+				<dt>breakpoints（Object）</dt>
+				<dd>
+ブレイクポイントのCSS変数名を4種類、s, m, l, xl の各サイズを指定する。<br>
+<code>初期値 : { 's': '--breakpoint-s', 'm': '--breakpoint-m', 'l': '--breakpoint-l', 'xl': '--breakpoint-xl' }</code>
+<pre class="codesample mt-3"><code>/* CSSで以下の設定をする */
+:root {
+  /* ブレイクポイントをCSS変数に設定する */
+  --breakpoint-s: 580px;
+  --breakpoint-m: 768px;
+  --breakpoint-l: 1000px;
+  --breakpoint-xl: 1240px;
+}</code></pre>
+<pre class="codesample mt-3"><code>moritakun.init( {
+  // CSS変数を指定する（デフォルトと同じ変数名の場合は指定不要）
+  's': '--breakpoint-s',
+  'm': '--breakpoint-m',
+  'l': '--breakpoint-l',
+  'xl': '--breakpoint-xl'
+} );</code></pre>
+				</dd>
+			</dl>
+
+
+			<h3 class="mt-5 mb-5">moritakun.appendCSS( href, media )</h3>
+<p>
+href に指定したCSSを&lt;head /&gt;に追加する。すでに同じURLのCSSがある場合は何もしない。
+</p>
+<pre class="codesample mt-3"><code>moritakun.appendCSS('https://example.com/style.css', 'all');</code></pre>
+
+
+			<h3 class="mt-5 mb-5">moritakun.getScript( src, callback )</h3>
+<p>
+src に指定したJSを&lt;head /&gt;に追加する。すでに同じURLのJSがある場合はコールバック callback() を実行する。
+</p>
+<pre class="codesample mt-3"><code>moritakun.getScript('https://example.com/script.js', function(){
+  console.log('ロードしました');
+});</code></pre>
+
+
+			<h3 class="mt-5 mb-5">moritakun.toBool( value )</h3>
+<p>
+文字列の'true'や'false'をブール値に変換して返す
+</p>
+<pre class="codesample mt-3"><code>console.log( moritakun.toBool('false') );
+>> false
+</code></pre>
+
+
+			<h3 class="mt-5 mb-5">moritakun.em2en( string )</h3>
+<p>
+文字列の全角英数字を半角英数字（一部記号を含む）に変換して返す
+</p>
+<pre class="codesample mt-3"><code>console.log( moritakun.em2en('０８８ー０００ー００００') );
+>> 088-000-0000
+</code></pre>
+
+
+			<h3 class="mt-5 mb-5">moritakun.htmlize( string )</h3>
+<p>
+文字列をHTMLエスケープして返す
+</p>
+<pre class="codesample mt-3"><code>console.log( moritakun.htmlize('&lt;p&gt;') );
+>> &amp;lt;p&amp;gt;
+</code></pre>
+
+
+			<h3 class="mt-5 mb-5">moritakun.esc_attr( string )</h3>
+<p>
+文字列をHTML属性用にエスケープして返す
+</p>
+<pre class="codesample mt-3"><code>console.log( moritakun.htmlize('&amp;lt;p&amp;gt;') );
+>> &amp;amp;lt;p&amp;amp;gt;
+</code></pre>
+
+
+			<h3 class="mt-5 mb-5">moritakun.dehtmlize( string )</h3>
+<p>
+文字列のHTMLエスケープをもとに戻して返す
+</p>
+<pre class="codesample mt-3"><code>console.log( moritakun.htmlize('&amp;lt;p&amp;gt;') );
+>> &lt;p&gt;
+</code></pre>
+
+
+			<h3 class="mt-5 mb-5">moritakun.number_format( num )</h3>
+<p>
+数値を数値フォーマットに変換して返す
+</p>
+<pre class="codesample mt-3"><code>console.log( moritakun.number_format(3980) );
+>> 3,980
+</code></pre>
+
+
+			<h3 class="mt-5 mb-5">moritakun.raf( callback ) <small class="text-danger">※ <code>init()</code>実行後</small></h3>
+<p>
+requestAnimationFrame, mozRequestAnimationFrame, webkitRequestAnimationFrame, msRequestAnimationFrame いずれかの関数のエイリアス。
+</p>
+
+			<h3 class="mt-5 mb-5">moritakun.jQuery( src, callback )</h3>
+<p>
+src のURLの jquery.js を読み込んでDOM読み込み完了後にコールバック callback() を実行する。src の指定がない場合はデフォルトのCDN（ https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js）を使用する（プロパティ msie が true の場合のバージョンは 1.12.4）。
+</p>
+<p>
+注）スクリプト内では window.$ ではなく window.jQuery 使用する。
+</p>
+<pre class="codesample mt-3"><code>console.log( moritakun.jQuery( null, function(){
+  var $body = jQuery('body');
+}) );</code></pre>
+
+
+			<h3 class="mt-5 mb-5">moritakun.getAbsOffsetTop( element )</h3>
+<p>
+element の文書内でのY座標のオフセット値を取得する。
+</p>
+<pre class="codesample mt-3"><code>console.log( moritakun.getAbsOffsetTop(document.querySelector('#main')) );
+>> <span id="getAbsOffsetTop-result"></span></code></pre>
+<script>
+d.querySelector('#getAbsOffsetTop-result').innerText = moritakun.getAbsOffsetTop( d.querySelector('#main') );
+</script>
+
+
+			<h3 class="mt-5 mb-5">moritakun.detectMobile()</h3>
+<p>
+モバイルユーザーエージェントを検出。
+</p>
+<pre class="codesample mt-3"><code>console.log( moritakun.detectMobile() );
+>> <span id="detectMobile-result"></span></code></pre>
+<script>
+d.querySelector('#detectMobile-result').innerText = moritakun.detectMobile();
+</script>
+
+
+			<h3 class="mt-5 mb-5">moritakun.toggleClassOnScroll( selector, opts )</h3>
+<p>
+スクロールによる要素 selector へのクラス付け
+</p>
+
+			<h5 class="mt-5 mb-5">オプション</h5>
+<pre class="codesample mt-3"><code>moritakun.toggleClassOnScroll( '.falde', {
+  'visibleClassName' : 'is-visible',
+  'toggleClass' : false,
+  'threshold' : 0.5,
+  'delay' : 0,
+  'duration' : 0
+} );</code></pre>
+			<dl>
+				<dt>visibleClassName（String）</dt>
+				<dd>
+追加するクラス名<br>
+<code>初期値 : 'is-visible'</code>
+				</dd>
+				<dt>toggleClass（Boolean）</dt>
+				<dd>
+スクロールから再度外れた時に追加したクラスを削除するかどうか<br>
+<code>初期値 : false</code>
+				</dd>
+				<dt>threshold（Number）</dt>
+				<dd>
+ウィンドウ高さに乗算するしきい値<br>
+<code>初期値 : 0.5</code>
+				</dd>
+				<dt>delay（Number）</dt>
+				<dd>
+指定がある場合、要素のスタイルに animation-delay: delay を追加する<br>
+<code>初期値 : 0</code>
+				</dd>
+				<dt>duration（Number）</dt>
+				<dd>
+指定がある場合、要素のスタイルに animation-duration: duration を追加する<br>
+<code>初期値 : 0</code>
+				</dd>
+			</dl>
+
+
+
+			<h3 class="mt-5 mb-5">moritakun.setJQqueryLazyload( selector, opt )</h3>
+<p>
+jquery.lazyload のスクリプトを読み込んで selector にセットする。<br>
+<a href="https://github.com/tuupola/lazyload" target="_blank">https://github.com/tuupola/lazyload</a> 
+</p>
+
+			<h5 class="mt-5 mb-5">オプション</h5>
+<pre class="codesample mt-3"><code>moritakun.setJQqueryLazyload( '*:visible img[data-original].lazyload', {
+  'effectspeed': 250,
+  'threshold': 250,
+  'effect': 'fadeIn',
+  'failure_limit': 9999,
+  'skip_invisible': true, // 非表示の画像をスキップ
+  'force': false,
+  // デフォルトのスクリプトURL
+  'script': 'https://cdnjs.cloudflare.com/ajax/libs/jquery_lazyload/1.9.7/jquery.lazyload.min.js'
+} );</code></pre>
+
+
+
+			<h3 class="mt-5 mb-5">moritakun.setJQquerySwiper( selector, opt )</h3>
+<p>
+Swiper のスクリプトを読み込んで selector にセットする。<br>
+カルーセルなど複数の Swiper がある場合には、selector へのセットはスクリプト読み込み完了後にキューされる。<br>
+<a href="https://swiperjs.com/" target="_blank">https://swiperjs.com/</a> 
+</p>
+
+			<h5 class="mt-5 mb-5">オプション</h5>
+<pre class="codesample mt-3"><code>moritakun.setJQquerySwiper( '.swiper', {
+  // デフォルトのスクリプトURL
+  'script': 'https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js'
+} );</code></pre>
+<p>
+その他は Swiper のオプションを指定する。
+</p>
+
+
+
+			<h3 class="mt-5 mb-5">moritakun.setJQqueryLightbox( selector, opt )</h3>
+<p>
+jquery.imagelightbox のスクリプトを読み込んで selector にセットする。<br>
+<a href="https://osvaldas.info/image-lightbox-responsive-touch-friendly" target="_blank">https://osvaldas.info/image-lightbox-responsive-touch-friendly</a>
+</p>
+
+			<h5 class="mt-5 mb-5">オプション</h5>
+<pre class="codesample mt-3"><code>moritakun.setJQqueryLazyload( 'a[href*=".png"], a[href*=".jpg"], a[href*=".jpeg"], a[href*=".JPG"]', {
+  'allowedTypes': '(?:png|jpg|jpeg|gif)(?:#[a-z0-9_\-]+)?', // lightbox を許可する拡張子
+  'animationSpeed': 500,
+  'quitOnEnd': true,
+  'containerClassName': 'container',
+  'title_regexp': '【(.+?)】([^【]+)', 
+  // デフォルトのスクリプトURL
+  'script': 'https://osvaldas.info/examples/image-lightbox-responsive-touch-friendly/imagelightbox.min.js'
+} );</code></pre>
+			<dl>
+				<dt>containerClassName（String）</dt>
+				<dd>
+ライトボックスの画像説明文のコンテンツをラップする&lt;div /&gt;に割り当てるクラス名。
+				</dd>
+				<dt>title_regexp（String）</dt>
+				<dd>
+ライトボックスの画像説明文（リンクのタイトル、なければ画像の代替文字）を「見出し&lt;h6 /&gt;と本文&lt;p /&gt;」に分割するための正規表現パターン。
+				</dd>
+			</dl>
+
+			<h5 class="mt-5 mb-5">出力されるHTML例</h5>
+<pre class="codesample mt-3"><code>&lt;body&gt;
+	&lt;!-- ライトボックスのコンテナ --&gt;
+	&lt;div id="img-overlay"&gt;
+		&lt;!-- ライトボックス画像 --&gt;
+		&lt;img id="imagelightbox" src="[large]"&gt;
+		&lt;!-- 画像説明文のコンテナ --&gt;
+		&lt;div id="img-data"&gt;
+			&lt;div class="container"&gt;
+				&lt;h6&gt;画像説明文のタイトル（正規表現で抽出できた場合のみ）&lt;/h6&gt;
+				&lt;p&gt;画像説明文&lt;/p&gt;
+			&lt;/div&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+&lt;/body&gt;</code></pre>
+<p>
+<b>CSSのひな形</b><br>
+<a href="./css/jquery.imagelightbox.css" target="_blank">jquery.imagelightbox.css</a>
+</p>
+
+		</section>
+
+
+
+<hr>
+
+
+
+		<section class="mb-5" id="properties">
+			<h2 class="mt-5 mb-5">プロパティ</h2>
+
+			<h3 class="mt-5 mb-5">moritakun.msie <small class="text-danger">※ <code>init()</code>実行後</small></h3>
+<p>
+IE（インターネット・エクスプローラ）の場合はメジャーバージョン値を返す。その他のブラウザは null 値。IEの場合は &lt;html /&gt;に 'msie msie-バージョン値' のクラスを追加する。 
+</p>
+
+
+<pre class="codesample mt-3"><code>console.log( moritakun.msie );
+>> <span id="msie-result"></span></code></pre>
+<script>
+d.querySelector('#msie-result').innerText = moritakun.msie ? moritakun.msie : 'null';
+</script>
+
+
+			<h3 class="mt-5 mb-5">moritakun.touch <small class="text-danger">※ <code>init()</code>実行後</small></h3>
+<p>
+スワイプの横方向と座標を取得するコールバックをまとめたオブジェクト。
+</p>
+			<dl>
+				<dt>touch.start(event)</dt>
+				<dd>
+スワイプ開始時の横方向の座標を格納。<code>touchstart</code> のイベントリスナに使用。
+				</dd>
+				<dt>touch.move(event)</dt>
+				<dd>
+スワイプの方向（left／right）をセットする。<code>touchmove</code> のイベントリスナに使用。
+				</dd>
+				<dt>touch.dir()</dt>
+				<dd>
+touch.move でセットされたスワイプの向き（left／right）を取得。
+				</dd>
+			</dl>
+<pre class="codesample mt-3"><code>var $div = jQuery( 'div#touchmove' );
+$div
+	.on( 'touchstart', moritakun.touch.start )
+	.on( 'touchmove',  moritakun.touch.move )
+	.on( 'touchend', function(event) {
+		if ( moritakun.touch.dir == 'right' ) console.log('右にスワイプ');
+		else if ( moritakun.touch.dir == 'left' ) console.log('左にスワイプ');
+	} );</code></pre>
+
+
+			<h3 class="mt-5 mb-5">moritakun.breakpoint <small class="text-danger">※ <code>init()</code>実行後</small></h3>
+<p>
+<code>init()</code>の引数に指定したCSS変数のブレイクポイントを返す。
+</p>
+<pre class="codesample mt-3"><code>console.log( moritakun.breakpoint );
+>> <span id="breakpoint-result"></span></code></pre>
+<script>
+d.querySelector('#breakpoint-result').innerText = JSON.stringify(moritakun.breakpoint);
+</script>
+
+		</section>
+
+
+
+<hr>
+
+
+
+		<section class="mb-5" id="jqueryplugin">
+			<h2 class="mt-5 mb-5">jQuery プラグイン</h2>
+
+
+			<h3 class="mt-5 mb-5">.scrollTopBtn()</h3>
+<p>
+スクロールで表示、ページトップへ戻ったら非表示になるスクロールボタン（クリック動作は非搭載）。
+</p>
+<pre class="codesample mt-3"><code>jQuery('#scroll-btn').scrollTopBtn( {
+  'fadeTime': 250 // 透過スピード
+} );</code></pre>
+
+
+			<h3 class="mt-5 mb-5">.pagerKeySupport()</h3>
+<p>
+ページャーの前後ボタンのキーボードサポート。
+</p>
+<pre class="codesample mt-3"><code>jQuery('.pager').pagerKeySupport( {
+  'prev': '.prev a, a.prev', // 戻るボタン（Key:37）のセレクター
+  'next': '.next a, a.next' // 進むボタン（Key:39）のセレクター
+} );</code></pre>
+
+		</section>
+
+
+	</main>
+
+</div>
+</body>
+</html>
