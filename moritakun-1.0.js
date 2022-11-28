@@ -150,7 +150,7 @@ function moritakun () {
 			if ( ! $swiper.length ) return;
 			// オプション
 			opt = jQuery.extend( {
-				'script': 'https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js',
+				'script': 'https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js'
 			}, opt );
 			//
 			if ( 'function' == typeof Swiper ) return this.applySwiper( $swiper, opt );
@@ -183,12 +183,12 @@ function moritakun () {
 			if ( ! $lightbox.length ) return;
 			// オプション
 			opt = jQuery.extend( {
-				'script': 'https://raw.githubusercontent.com/osvaldasvalutis/imagelightbox.js/master/imagelightbox.min.js',
 				'allowedTypes': '(?:png|jpg|jpeg|gif)(?:#[a-z0-9_\-]+)?',
 				'animationSpeed': 500,
 				'quitOnEnd': true,
 				'containerClassName': 'container',
-				'title_regexp': '【(.+?)】([^【]+)'
+				'title_regexp': '【(.+?)】([^【]+)',
+				'script': 'https://osvaldas.info/examples/image-lightbox-responsive-touch-friendly/imagelightbox.min.js'
 			}, opt );
 			opt.onStart = function () { // ライトボックス開始
 				$body.append( jQuery('<div id="img-overlay"></div>') );
@@ -607,7 +607,7 @@ function moritakun () {
 			'toggleClass' : false,
 			'threshold' : 0.5, // しきい値（ウィンドウ高さに乗算）
 			'delay' : 0,
-			'duration' : 0,
+			'duration' : 0
 		}, opts );
 
 		// クラスを追加・取り除く関数
