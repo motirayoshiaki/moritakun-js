@@ -528,7 +528,7 @@ function moritakun () {
 			callback();
 		}
 		else {
-			if ( ! src ) src = 'https://cdnjs.cloudflare.com/ajax/libs/jquery/' + ( this.msie ? '1.12.4' : '3.3.1' ) + '/jquery.min.js';
+			if ( ! src ) src = 'https://cdnjs.cloudflare.com/ajax/libs/jquery/' + ( this.msie ? '1.12.4' : '3.6.1' ) + '/jquery.min.js';
 
 			var self = this;
 			this.getScript( src, function () {
