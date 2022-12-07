@@ -144,6 +144,7 @@ function moritakun () {
 			return swiper;
 		};
 
+		var self = this;
 		this.setJQquerySwiper = function( selector, opt ) {
 			if ( ! selector ) selector = '.swiper';
 			var $swiper = ( 'object' == typeof selector ) ? selector : jQuery(selector);
@@ -153,11 +154,11 @@ function moritakun () {
 				'script': 'https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js'
 			}, opt );
 			//
-			if ( 'function' == typeof Swiper ) return this.applySwiper( $swiper, opt );
+			if ( 'function' == typeof Swiper ) return self.applySwiper( $swiper, opt );
 			// セットアップの関数をキュー
 			if (! jQueryQueue['swiper']) jQueryQueue['swiper'] = [];
 			jQueryQueue['swiper'].push( function () {
-				this.applySwiper( $swiper, opt );
+				self.applySwiper( $swiper, opt );
 			} );
 			jQuery.getScript( opt.script ).done( function () {
 				for ( var i in jQueryQueue['swiper'] ) {
