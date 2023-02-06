@@ -403,12 +403,13 @@ function moritakun () {
 			if ( ! selectors['head'] ) {
 				selectors['head'] = d.querySelector('head');
 			}
-			var script = d.createElement('script');
-			script.src = src;
-			if ( ! m.gotScripts[src] ) {
+			var script = d.querySelector('head > script[src="' + src + '"]');
+			if ( ! script ) {
+				script = d.createElement('script');
+				script.src = src;
 				selectors['head'].appendChild(script);
+				m.gotScripts[src] = 'added';
 			}
-			m.gotScripts[src] = 'added';
 			//
 			script.addEventListener( 'load', function () {
 				m.gotScripts[src] = 'loaded';
