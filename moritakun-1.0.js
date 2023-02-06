@@ -393,7 +393,8 @@ function moritakun () {
 
 	this.getScript = function ( src, callback ) {
 		if ( ! src || 'string' != typeof src ) return;
-		if ( this.gotScripts[src] ) {
+		var m = this;
+		if ( 'loaded' == m.gotScripts[src] ) {
 			// 配置済のスクリプトがあればスクリプトを実行
 			if ( 'function' === typeof callback ) callback();
 		}
@@ -404,10 +405,13 @@ function moritakun () {
 			}
 			var script = d.createElement('script');
 			script.src = src;
-			selectors['head'].appendChild(script);
-			this.gotScripts[src] = true;
+			if ( ! m.gotScripts[src] ) {
+				selectors['head'].appendChild(script);
+			}
+			m.gotScripts[src] = 'added';
 			//
 			script.addEventListener( 'load', function () {
+				m.gotScripts[src] = 'loaded';
 				if ( 'function' === typeof callback ) callback( script );
 			}, false );
 		}
