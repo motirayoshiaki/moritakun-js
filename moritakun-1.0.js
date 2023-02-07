@@ -646,8 +646,11 @@ function moritakun () {
 		//
 		let handlers = [];
 		for ( var i = 0; i < targets.length; i++ ) {
-			var element = targets[i];
-			if ( 'object' !== typeof element ) continue;
+			if ( 'object' !== typeof targets[i] ) continue;
+			_setHandler( targets[i], i );
+		}
+
+		function _setHandler( element, i ) {
 			if ( 'object' != typeof element.dataset ) element.dataset = {};
 			// 遅延
 			var delay = element.dataset.delay ? element.dataset.delay : opts.delay ? opts.delay : 0;
@@ -656,11 +659,13 @@ function moritakun () {
 			var duration = element.dataset.duration ? element.dataset.duration : opts.duration ? opts.duration : 0;
 			if ( duration ) element.style.setProperty('animation-duration', duration);
 			// イベントハンドラ
-			handlers[i] = function () {
-				if ( ! _toggleClass_(element) ) window.removeEventListener( 'scroll', handlers[i] );
+			var thisHandler = function () {
+				if ( ! _toggleClass_(element) ) window.removeEventListener( 'scroll', thisHandler );
 			};
-			window.addEventListener( 'scroll', handlers[i] );
+			window.addEventListener( 'scroll', thisHandler );
 		}
+
+
 		window.dispatchEvent( new Event('scroll') );
 	};
 
