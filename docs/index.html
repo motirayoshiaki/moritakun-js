@@ -418,7 +418,8 @@ d.querySelector('#breakpoint-result').innerText = JSON.stringify(moritakun.break
 スクロールで表示、ページトップへ戻ったら非表示になるスクロールボタン（クリック動作は非搭載）。
 </p>
 <pre class="codesample mt-3"><code>jQuery('#scroll-btn').scrollTopBtn( {
-  'fadeTime': 250 // 透過スピード
+  'fadeTime': 250, // 透過スピード（数値）
+  'scrollTo': false // .scrollTo()を適用（真偽値 または .scrollTo() のオプション）
 } );</code></pre>
 
 
@@ -427,8 +428,19 @@ d.querySelector('#breakpoint-result').innerText = JSON.stringify(moritakun.break
 ページャーの前後ボタンのキーボードサポート。
 </p>
 <pre class="codesample mt-3"><code>jQuery('.pager').pagerKeySupport( {
-  'prev': '.prev a, a.prev', // 戻るボタン（Key:37）のセレクター
-  'next': '.next a, a.next' // 進むボタン（Key:39）のセレクター
+  'prev': '.prev a, a.prev', // 戻るボタン（Key:37）のセレクター（文字列）
+  'next': '.next a, a.next' // 進むボタン（Key:39）のセレクター（文字列）
+} );</code></pre>
+
+
+			<h3 class="mt-5 mb-5">.scrollTo()</h3>
+<p>
+ページ内リンクのスムーススクロール。
+</p>
+<pre class="codesample mt-3"><code>jQuery('a[href^="#"]').scrollTo( {
+  'duration': 500, // スクロール経過時間（数値）
+  'easing': 'swing', // イージング（文字列）
+  'offset': 0 // オフセット（数値 または オフセット数値を返す関数）
 } );</code></pre>
 
 		</section>
