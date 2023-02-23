@@ -46,11 +46,17 @@ function moritakun () {
 		if( 'undefined' == typeof jQuery.fn.scrollTopBtn ) {
 			jQuery.fn.scrollTopBtn = function(opts) {
 				opts = jQuery.extend({
-					'fadeTime': 250
+					'fadeTime': 250,
+					'scrollTo': false
 				}, opts);
 
 				return this.each( function(index) {
 					var $this = jQuery(this);
+					// ページ内リンク
+					if ( opts.scrollTo ) {
+						if ( 'object' === typeof opts.scrollTo ) $this.scrollTo(opts.scrollTo);
+						else $this.scrollTo();
+					}
 					$window.on('scroll', function () {
 						var w = this.innerHeight, s = this.scrollY;
 						( w < $page.height() && s > 0 ) ? $this.fadeIn(opts.fadeTime) : $this.stop().fadeOut(opts.fadeTime);
@@ -81,6 +87,53 @@ function moritakun () {
 				});
 			};
 		}
+
+
+		// ページ内リンク
+		// --------------------
+
+		if( 'undefined' == typeof jQuery.fn.scrollTo ) {
+			jQuery.fn.scrollTo = function(opts) {
+				opts = jQuery.extend( { 'duration': 500, 'easing': 'swing', 'offset': 0 }, opts );
+			var $page = jQuery('html, body');
+			return this.each( function(index) {
+				jQuery(this).on( 'click.scrollto', function(e) {
+					if (e) e.preventDefault();
+					if ( 'undefined' === typeof this.dataset.href ) {
+						if ( this.href ) {
+							var url = d.URL.replace(/^(.+)#.*/, '$1');
+							if ( this.href.match(url) )
+								this.dataset.href = this.href.replace( url, '' );
+							else if ( ! this.href.match(/^#/) )
+								this.dataset.href = false;
+						}
+						else {
+							this.dataset.href = false;
+						}
+					}
+					var href = this.dataset.href;
+					if ( ! href ) return true;
+					if ( '#' != href && ! jQuery(href).length ) return false;
+					var scrollTop = 0;
+					// UI Tabs
+					var $tab = jQuery( 'a.ui-tabs-anchor[href="' + href + '"]' );
+					if( $tab.length ) $tab.trigger('click');
+					if ( '#' != href ) {
+						// UI Tabs の場合はタブへ移動
+						var $target = $tab.length ? $tab : jQuery(href);
+						// オフセット（固定配置のヘッダなど）の関数実行
+						var offset = ( 'function' == typeof opts.offset ) ? opts.offset() : opts.offset;
+						scrollTop = $target.offset().top - offset;
+					}
+					$page.animate(
+						{ 'scrollTop': scrollTop },
+						{ 'duration': opts.duration, 'easing': opts.easing }
+					);
+					return false;
+				} );
+			});
+		};
+	}
 
 
 		// 画像遅延表示
