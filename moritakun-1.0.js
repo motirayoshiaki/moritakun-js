@@ -278,14 +278,12 @@ function moritakun () {
 				var test = [];
 				$lightbox.each(function (i) {
 					var $this = jQuery(this);
-					var group = $this.data('group');
-					if ( ! group ) {
-						group = 'imagelightbox' + i;
-						$this.data('group', group);
+					if ( ! this.getAttribute('data-group') ) {
+						this.setAttribute('data-group', 'imagelightbox' + i);
 					}
-					if (true === test[group]) return true;
-					jQuery('a[data-group=' + group + ']').imageLightbox(args);
-					test[group] = true;
+					if ( test[this.getAttribute('data-group')] ) return true;
+					jQuery('a[data-group=' + this.dataset.group + ']').imageLightbox(opt);
+					test[this.dataset.group] = true;
 				});
 			});
 		};
