@@ -245,7 +245,9 @@ function moritakun () {
 				'script': 'https://osvaldas.info/examples/image-lightbox-responsive-touch-friendly/imagelightbox.min.js'
 			}, opt );
 			opt.onStart = function () { // ライトボックス開始
-				$body.append( jQuery('<div id="img-overlay"></div>') );
+				if ( ! jQuery('#img-overlay').length ) {
+					$body.append( jQuery('<div id="img-overlay"></div>') );
+				}
 			};
 			opt.onLoadStart = function () { // ライトボックス読み込み開始
 				jQuery('#img-data').remove();
