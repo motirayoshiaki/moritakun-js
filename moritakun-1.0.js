@@ -11,6 +11,10 @@ function moritakun () {
 	this.version = 1.00;
 
 	this.gotScripts = new Array();
+	this.cdn = {
+		swiper8: 'https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js'
+	};
+
 	let d = window.document;
 
 	let selectors = {};
@@ -206,9 +210,8 @@ function moritakun () {
 			var $swiper = ( 'object' == typeof selector ) ? selector : jQuery(selector);
 			if ( ! $swiper.length ) return;
 			// オプション
-			opt = jQuery.extend( {
-				'script': 'https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js'
-			}, opt );
+			if ( 'object' != typeof selector ) opt = {};
+			if ( ! opt.script ) opt.script = self.cdn.swiper8;
 			//
 			if ( 'function' == typeof Swiper ) return self.applySwiper( $swiper, opt );
 			// セットアップの関数をキュー
