@@ -62,8 +62,12 @@ function moritakun () {
 						else $this.scrollTo();
 					}
 					$window.on('scroll', function () {
-						var w = this.innerHeight, s = this.scrollY;
-						( w < $page.height() && s > 0 ) ? $this.fadeIn(opts.fadeTime) : $this.stop().fadeOut(opts.fadeTime);
+						setTimeout( function() {
+							var w = this.innerHeight, s = this.scrollY;
+							( w < $page.height() && s > 0 ) ?
+								$this.fadeIn(opts.fadeTime) :
+								$this.stop().fadeOut(opts.fadeTime);
+						}, 100);
 					}).trigger('scroll');
 				});
 			};
@@ -237,6 +241,7 @@ function moritakun () {
 		// https://osvaldas.info/image-lightbox-responsive-touch-friendly
 		// --------------------
 
+		let jQqueryLightboxGroup = {};
 		this.setJQqueryLightbox = function( selector, opt ) {
 			if ( ! selector ) selector = 'a[href*=".png"], a[href*=".jpg"], a[href*=".jpeg"], a[href*=".JPG"]';
 			var $lightbox = ( 'object' == typeof selector ) ? selector : jQuery(selector);
@@ -251,17 +256,18 @@ function moritakun () {
 				'script': 'https://osvaldas.info/examples/image-lightbox-responsive-touch-friendly/imagelightbox.min.js'
 			}, opt );
 			opt.onStart = function () { // ライトボックス開始
-				if ( ! jQuery('#img-overlay').length ) {
+				if ( ! d.querySelector('#img-overlay') ) {
 					$body.append( jQuery('<div id="img-overlay"></div>') );
 				}
 			};
 			opt.onLoadStart = function () { // ライトボックス読み込み開始
-				jQuery('#img-data').remove();
+				if ( d.querySelector('#img-data') ) jQuery('#img-data').remove();
 			};
 			opt.onLoadEnd = function () { // ライトボックス読み込み終了
-				var $a = jQuery('a[data-group][href="' + jQuery('#imagelightbox').attr('src') + '"]');
 				// 画像
-				jQuery('#imagelightbox').appendTo('#img-overlay');
+				const $lightbox = jQuery('#imagelightbox');
+				$lightbox.detach().appendTo('#img-overlay');
+				var $a = jQuery('a[data-group][href="' + $lightbox.attr('src') + '"]');
 				// テキスト
 				var txt = $a.attr('title');
 				if ( 'undefined' === typeof txt ) txt = $a.find('img:first').attr('alt');
@@ -279,19 +285,18 @@ function moritakun () {
 				$window.trigger('resize');
 			};
 			opt.onEnd = function () { // ライトボックス終了
-				jQuery('#img-overlay, #img-data').remove();
+				jQuery('#img-overlay, #img-data, #imagelightbox').remove();
 			};
 			//
 			jQuery.getScript( opt.script ).done( function () {
-				var test = [];
 				$lightbox.each(function (i) {
 					var $this = jQuery(this);
-					if ( ! this.getAttribute('data-group') ) {
-						this.setAttribute('data-group', 'imagelightbox' + i);
+					if ( ! this.dataset.group ) {
+						this.dataset.group = 'imagelightbox' + i;
 					}
-					if ( test[this.getAttribute('data-group')] ) return true;
+					if ( jQqueryLightboxGroup[this.dataset.group] ) return true;
 					jQuery('a[data-group=' + this.dataset.group + ']').imageLightbox(opt);
-					test[this.dataset.group] = true;
+					jQqueryLightboxGroup[this.dataset.group] = true;
 				});
 			});
 		};
@@ -719,11 +724,12 @@ function moritakun () {
 			if ( duration ) element.style.setProperty('animation-duration', duration);
 			// イベントハンドラ
 			var thisHandler = function () {
-				if ( ! _toggleClass_(element) ) window.removeEventListener( 'scroll', thisHandler );
+				setTimeout( function() {
+					if ( ! _toggleClass_(element) ) window.removeEventListener( 'scroll', thisHandler );
+				}, 100);
 			};
 			window.addEventListener( 'scroll', thisHandler );
 		}
-
 
 		window.dispatchEvent( new Event('scroll') );
 	};
